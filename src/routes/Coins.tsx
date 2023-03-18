@@ -58,7 +58,6 @@ const Img = styled.img`
   height: 35px;
   margin-right: 10px;
 `;
-
 const Coins = () => {
   const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
