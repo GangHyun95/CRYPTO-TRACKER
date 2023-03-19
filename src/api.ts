@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "https://api.coinpaprika.com/v1";
-
+// const BASE_URL = "temp";
 export const fetchCoins = async () => {
   return await axios
     .get(`${BASE_URL}/coins`)

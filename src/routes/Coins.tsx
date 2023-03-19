@@ -3,6 +3,9 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
+import { HiSun, HiMoon } from "react-icons/hi";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "./atoms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -21,15 +24,20 @@ const CoinsList = styled.ul`
 `;
 
 const Coin = styled.li`
-  background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  display: flex;
+  align-items: center;
+  background-color: ${(props) => props.theme.cardBgColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
+  box-shadow: rgba(10, 10, 10, 0.1) 0px 0.2rem 0.5rem;
+  cursor: pointer;
   a {
     display: flex;
+    width: 100%;
     align-items: center;
-    padding: 20px;
-    transition: color 0.2s ease-in;
+    padding: 14px;
+    transition: all 0.2s ease-in;
   }
   &:hover {
     a {
@@ -61,26 +69,47 @@ const Img = styled.img`
   height: 35px;
   margin-right: 10px;
 `;
+
+const Fixed = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  top: 30px;
+  left: 30px;
+  cursor: pointer;
+  svg {
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: ${(props) => props.theme.textColor};
+    box-shadow: rgba(10, 10, 10, 0.1) 0px 2px 2px;
+    color: ${(props) => props.theme.bgColor};
+  }
+  button {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    outline: 0;
+  }
+`;
+
 const Coins = () => {
   const { isLoading, data: coins } = useQuery<ICoin[]>(
     ["allCoins"],
     fetchCoins
   );
-  // const [coins, setCoins] = useState<CoinInterface[]>([]);
-  // const [loading, setLoading] = useState(true);
-
-  // const getCoins = async () => {
-  //   const res = await axios("https://api.coinpaprika.com/v1/coins");
-  //   setCoins(res.data.slice(0, 100));
-  //   setLoading(false);
-  // };
-
-  // useEffect(() => {
-  //   getCoins();
-  // }, []);
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
   return (
     <Container>
-      {" "}
+      <Fixed>
+        <button onClick={toggleDarkAtom}>
+          {isDark ? <HiSun /> : <HiMoon />}
+        </button>
+      </Fixed>
       <Helmet>
         <title>Coin</title>
       </Helmet>
@@ -96,7 +125,7 @@ const Coins = () => {
               <Link to={`/${coin.id}/chart`} state={coin}>
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
-                  alt=""
+                  alt="img"
                 />
                 {coin.name} &rarr;
               </Link>

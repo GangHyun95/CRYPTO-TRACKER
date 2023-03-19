@@ -4,12 +4,16 @@ import {
   Outlet,
   useLocation,
   useMatch,
+  useNavigate,
   useParams,
 } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import { Helmet } from "react-helmet";
 import { AiFillHome } from "react-icons/ai";
+import { HiMoon, HiSun } from "react-icons/hi";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "./atoms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -32,7 +36,8 @@ const Title = styled.h1`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.cardBgColor};
+  box-shadow: rgba(10, 10, 10, 0.1) 0px 0.2rem 0.5rem;
   padding: 10px 20px;
   border-radius: 10px;
   margin: 20px 0;
@@ -62,7 +67,8 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.cardBgColor};
+  box-shadow: rgba(10, 10, 10, 0.1) 0px 0.2rem 0.5rem;
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>
@@ -78,6 +84,9 @@ const Loader = styled.div`
 
 const Fixed = styled.div`
   position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   top: 30px;
   left: 30px;
   cursor: pointer;
@@ -87,7 +96,14 @@ const Fixed = styled.div`
     height: 50px;
     border-radius: 50%;
     background-color: ${(props) => props.theme.textColor};
+    box-shadow: rgba(10, 10, 10, 0.1) 0px 2px 2px;
     color: ${(props) => props.theme.bgColor};
+  }
+  button {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    outline: 0;
   }
 `;
 
@@ -162,35 +178,19 @@ const Coin = () => {
     { staleTime: 5000 }
   );
 
-  // const [loading, setLoading] = useState(true);
-  // const [info, setInfo] = useState<InfoData>();
-  // const [priceInfo, setPriceInfo] = useState<PriceData>();
-  // const getInfoData = async () => {
-  //   const res = await axios.get(
-  //     `https://api.coinpaprika.com/v1/coins/${coinId}`
-  //   );
-  //   setInfo(res.data);
-  //   setLoading(false);
-  // };
-
-  // const getPriceData = async () => {
-  //   const res = await axios.get(
-  //     `https://api.coinpaprika.com/v1/tickers/${coinId}`
-  //   );
-  //   setPriceInfo(res.data);
-  //   setLoading(false);
-  // };
-
   const loading = infoLoading || tickersLoading;
-  console.log(tickersData);
-
+  const navigate = useNavigate();
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
   return (
     <Container>
-      <Link to="/">
-        <Fixed>
-          <AiFillHome />
-        </Fixed>
-      </Link>
+      <Fixed>
+        <AiFillHome onClick={() => navigate("/")} />
+        <button onClick={toggleDarkAtom}>
+          {isDark ? <HiSun /> : <HiMoon />}
+        </button>
+      </Fixed>
       <Helmet>
         <title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}

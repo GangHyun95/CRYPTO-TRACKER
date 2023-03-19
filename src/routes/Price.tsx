@@ -1,17 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 
-interface IPriceProps {
-  percent15m: number;
-  percent30m: number;
-  percent1h: number;
-  percent6h: number;
-  percent12h: number;
-  percent7d: number;
-  percent30d: number;
-  percent1y: number;
-}
-
 const Container = styled.section`
   display: grid;
   justify-items: center;
@@ -20,7 +9,8 @@ const Container = styled.section`
 `;
 
 const Box = styled.div`
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.cardBgColor};
+  box-shadow: rgba(10, 10, 10, 0.1) 0px 0.2rem 0.5rem;
   padding: 20px;
   border-radius: 10px;
   width: 100%;
@@ -54,6 +44,10 @@ const Percent = styled.span`
   font-weight: 600;
 `;
 
+interface IPriceProps {
+  [key: string]: number;
+}
+
 export default function Price() {
   const {
     percent15m,
@@ -77,8 +71,8 @@ export default function Price() {
   ];
   return (
     <Container>
-      {percentList.map((item) => (
-        <Box>
+      {percentList.map((item, idx) => (
+        <Box key={idx}>
           <Title>{item.time} ago</Title>
           <PercentBox percent={item.percent}>
             <Percent>
