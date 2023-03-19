@@ -1,7 +1,7 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoins } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -43,7 +43,7 @@ const Title = styled.h1`
 const Loader = styled.div`
   text-align: center;
 `;
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -59,28 +59,32 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 const Coins = () => {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { isLoading, data: coins } = useQuery<ICoin[]>(
+    ["allCoins"],
+    fetchCoins
+  );
+  // const [coins, setCoins] = useState<CoinInterface[]>([]);
+  // const [loading, setLoading] = useState(true);
 
-  const getCoins = async () => {
-    const res = await axios("https://api.coinpaprika.com/v1/coins");
-    setCoins(res.data.slice(0, 100));
-    setLoading(false);
-  };
+  // const getCoins = async () => {
+  //   const res = await axios("https://api.coinpaprika.com/v1/coins");
+  //   setCoins(res.data.slice(0, 100));
+  //   setLoading(false);
+  // };
 
-  useEffect(() => {
-    getCoins();
-  }, []);
+  // useEffect(() => {
+  //   getCoins();
+  // }, []);
   return (
     <Container>
       <Header>
         <Title>코인</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {coins?.map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={coin}>
                 <Img
