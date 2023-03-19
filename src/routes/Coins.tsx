@@ -6,7 +6,7 @@ import { fetchCoins } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
-  max-width: 480px;
+  max-width: 460px;
   margin: 0 auto;
 `;
 
@@ -16,7 +16,9 @@ const Header = styled.header`
   justify-content: center;
   align-items: center;
 `;
-const CoinsList = styled.ul``;
+const CoinsList = styled.ul`
+  margin-top: 20px;
+`;
 
 const Coin = styled.li`
   background-color: white;
@@ -80,10 +82,10 @@ const Coins = () => {
     <Container>
       {" "}
       <Helmet>
-        <title>코인</title>
+        <title>Coin</title>
       </Helmet>
       <Header>
-        <Title>코인</Title>
+        <Title>COIN</Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
@@ -91,7 +93,7 @@ const Coins = () => {
         <CoinsList>
           {coins?.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`} state={coin}>
+              <Link to={`/${coin.id}/chart`} state={coin}>
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                   alt=""

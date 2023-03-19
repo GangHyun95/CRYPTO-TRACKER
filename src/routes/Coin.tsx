@@ -9,6 +9,7 @@ import {
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import { Helmet } from "react-helmet";
+import { AiFillHome } from "react-icons/ai";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -34,6 +35,8 @@ const Overview = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   padding: 10px 20px;
   border-radius: 10px;
+  margin: 20px 0;
+  line-height: 1.5;
 `;
 const OverviewItem = styled.div`
   display: flex;
@@ -45,9 +48,6 @@ const OverviewItem = styled.div`
     text-transform: uppercase;
     margin-bottom: 5px;
   }
-`;
-const Description = styled.p`
-  margin: 20px 0px;
 `;
 
 const Tabs = styled.div`
@@ -74,6 +74,21 @@ const Tab = styled.span<{ isActive: boolean }>`
 
 const Loader = styled.div`
   text-align: center;
+`;
+
+const Fixed = styled.div`
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  cursor: pointer;
+  svg {
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: ${(props) => props.theme.textColor};
+    color: ${(props) => props.theme.bgColor};
+  }
 `;
 
 interface InfoData {
@@ -167,8 +182,15 @@ const Coin = () => {
   // };
 
   const loading = infoLoading || tickersLoading;
+  console.log(tickersData);
+
   return (
     <Container>
+      <Link to="/">
+        <Fixed>
+          <AiFillHome />
+        </Fixed>
+      </Link>
       <Helmet>
         <title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -197,7 +219,7 @@ const Coin = () => {
               <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
-          <Description>{infoData?.description}</Description>
+          <Overview>{infoData?.description}</Overview>
           <Overview>
             <OverviewItem>
               <span>Total Suply:</span>
@@ -216,7 +238,19 @@ const Coin = () => {
               <Link to={`/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
-          <Outlet context={{ coinId: coinId }} />
+          <Outlet
+            context={{
+              coinId: coinId,
+              percent15m: tickersData?.quotes.USD.percent_change_15m,
+              percent30m: tickersData?.quotes.USD.percent_change_30m,
+              percent1h: tickersData?.quotes.USD.percent_change_1h,
+              percent6h: tickersData?.quotes.USD.percent_change_6h,
+              percent12h: tickersData?.quotes.USD.percent_change_12h,
+              percent7d: tickersData?.quotes.USD.percent_change_7d,
+              percent30d: tickersData?.quotes.USD.percent_change_30d,
+              percent1y: tickersData?.quotes.USD.percent_change_1y,
+            }}
+          />
         </>
       )}
     </Container>
