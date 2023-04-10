@@ -1,19 +1,19 @@
 # 코인 시세 사이트
 
-## 🖥️ 프로젝트 소개
+## 🔎 프로젝트 소개
 Coinpaprika API 를 사용하여 코인시세를 실시간으로 확인할 수 있는 사이트 입니다.
 
-## 💻 사용 기술
+## 🔨 사용 기술
 
-- `React`
-- `react-apexcharts`
-- `tanstack/react-query`
-- `JavaScript`
-- `TypeScript`
-- `Recoil`
-- `axios`
-- `react-helmet`
-- `Styled-Components`
+* `React`
+* `react-apexcharts`
+* `tanstack/react-query`
+* `JavaScript`
+* `TypeScript`
+* `Recoil`
+* `axios`
+* `react-helmet`
+* `Styled-Components`
 
 ## 📌 주요 기능
 
